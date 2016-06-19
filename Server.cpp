@@ -159,7 +159,9 @@ unsigned int Server::multiIO()
 							int msgLength = -1; while (message[++msgLength] != '\0' && msgLength < NETWORK_BUFFER_SIZE);
 							char* relayMessage = new char[NETWORK_BUFFER_SIZE];
 							int relayMessageSize = sprintf_s(relayMessage, NETWORK_BUFFER_SIZE, "User %d (%s): %s\n\r\n\r", con->connectionID, con->IPAddress, message);
-							con->SendNetworkMessage(relayMessage, relayMessageSize);
+							for (auto subIt = sessions.cbegin(); subIt != sessions.cend(); ++subIt)
+								sessions[subIt->first]->SendNetworkMessage(relayMessage, relayMessageSize);
+							//con->SendNetworkMessage(relayMessage, relayMessageSize);
 						}
 					}
 					else
